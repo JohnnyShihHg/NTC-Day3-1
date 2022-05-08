@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+
+<body>
+    <div id="app">
+        <header>Simple Cauculator</header>
+        <div>{{ initValue }}</div>
+        <div>
+            <template v-for="num in 9"> <!--for打印數字-->
+                <button @click="addNum(num)">{{ num }}</button>
+            </template>
+            <button @click="addNum(0)">0</button>
+            <br>
+            <template v-for="operator in operators">
+                <button @click="operation(operator)">{{ operator }}</button> 
+            </template><!--抓到運算符--->
+
+            <button @click="equal">=</button>
+            <button @click="reset">reset</button>
+            
+
+        </div>
+    </div>
+    <script>
+        Vue.createApp({
+            data() {
+                return { // 使用的元素
+                    initValue: '0',
+                    operators: ['+', '-', '*', '/'],
+                    savedValue: 0,
+                    chooseOperator: ''
+                }
+            },
+            methods: {
+                addNum(value) {  //判斷輸入的數字當0顯示0
+                    if (this.initValue === '0') {
+                        this.initValue = value;
+                    } else {
+                        this.initValue += value.toString(); //不然推送一個數字
+                    }
+                },
+                operation(operator) {
+                    this.savedValue = Number(this.initValue);
+                    this.initValue = '0';
+                    this.chooseOperator = operator;
+                },
+                equal() {
+                    switch (this.chooseOperator) {  //抓到第一次輸入和判斷抓到的operator
+                        case '+':
+                            this.initValue = `${this.savedValue + Number(this.initValue)}`;
+                            break;
+                        case '-':
+                            this.initValue = `${this.savedValue - Number(this.initValue)}`;
+                            break;
+                        case '*':
+                            this.initValue = `${this.savedValue * Number(this.initValue)}`;
+                            break;
+                        case '/':
+                            this.initValue = `${this.savedValue / Number(this.initValue)}`;
+                            break;
+                    }
+                }
+            },
+            reset() {
+                    this.initValue = 0;
+                    // 歸零
+                },
+            }).mount('#app')
+
+    </script>
+</body>
+
+</html>
